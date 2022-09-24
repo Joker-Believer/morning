@@ -50,7 +50,6 @@ wm = WeChatMessage(client)
 weather = get_weather()
 data = {"weather":{"value":weather['weather']},"low":{"value":weather['low'], "color": "#1E90FF"}
         ,"high":{"value":weather['high'], "color": "#FF0000"}
-        ,"temperature":{"value":temperature}
         ,"love_days":{"value":get_count(), "color": "#FFB6C1"}
         ,"birthday_left":{"value":get_birthday()}
         ,"words":{"value":get_words(), "color":get_random_color()}}
