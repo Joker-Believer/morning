@@ -14,15 +14,16 @@ birthday = os.environ['BIRTHDAY']
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
 
-user_id = os.environ["USER_ID"]
+user_id_susu = os.environ["USER_ID_SUSU"]
+user_id_ya = os.environ["USER_ID_YA"]
 template_id = os.environ["TEMPLATE_ID"]
 
 
 def get_weather():
-  url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+#   url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+  url = "https://v0.yiketianqi.com/api?unescape=1&version=v62&appid=65516522&appsecret=Q93NXjBS&city=" + city 
   res = requests.get(url).json()
-  weather = res['data']['list'][0]
-  return weather
+  return res
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
@@ -40,6 +41,14 @@ def get_words():
     return get_words()
   return words.json()['data']['text']
 
+def get_words2():
+  url = "http://open.iciba.com/dsapi/"
+  r = requests.get(url)
+  content = r.json()['content']
+  note = r.json()['note']
+  return note
+
+
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
 
@@ -48,10 +57,20 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 weather = get_weather()
-data = {"weather":{"value":weather['weather']},"low":{"value":str(math.floor(weather['low'])) + "℃", "color": "#1E90FF"}
-        ,"high":{"value":str(math.floor(weather['high'])) + "℃", "color": "#FF0000"}
+data = {
+        "weather":{"value":weather['wea_day']}
+        ,"low":{"value":str(math.floor(weather['tem2'])) + "℃", "color": "#1E90FF"}
+        ,"high":{"value":str(math.floor(weather['tem1'])) + "℃", "color": "#FF0000"}
         ,"love_days":{"value":get_count(), "color": "#FFB6C1"}
         ,"birthday_left":{"value":get_birthday()}
-        ,"words":{"value":get_words(), "color":get_random_color()}}
-res = wm.send_template(user_id, template_id, data)
+        ,"words":{"value":get_words(), "color":get_random_color()}
+        ,"words2":{"value":get_words2(), "color":get_random_color()}
+        ,"data":{"value":weather['date']}
+        ,"week":{"value":weather['week']}
+        ,"weather_words":{"value":weather['air_tips'], "color":get_random_color()}
+       }
+
+res = wm.send_template(user_id_susu, template_id, data)
+res = wm.send_template(user_id_ya, template_id, data)
+
 print(res)
