@@ -65,7 +65,7 @@ data = {
         ,"birthday_left":{"value":get_birthday()}
         ,"words":{"value":get_words(), "color":get_random_color()}
         ,"words2":{"value":get_words2(), "color":get_random_color()}
-        ,"data":{"value":weather['date']}
+        ,"date":{"value":weather['date']}
         ,"week":{"value":weather['week']}
         ,"weather_words":{"value":weather['air_tips'], "color":get_random_color()}
        }
